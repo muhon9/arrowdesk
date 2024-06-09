@@ -1,0 +1,24 @@
+{
+  "name": "react-node-auth",
+  "version": "1.0.0",
+  "description": "An auth workflow example using React and NodeJs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-dependencies": "npm install && cd react-front && npm install && cd ../node-backend && npm install",
+    "client": "cd react-front && npm run dev",
+    "server": "cd node-backend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "format": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,md}\"",
+    "eslint": "eslint src/**/*.{js,jsx}"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.3.0"
+  },
+  "dependencies": {
+    "prettier": "^2.7.1"
+  }
+}
