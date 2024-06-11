@@ -9,12 +9,16 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers', 'manageUsers'), validate(userValidation.getUsers), userController.getUsers);
+  .get((req, res) => {
+    res.json({
+      message: 'Ticket get',
+    });
+  });
 
 router
-  .route('/:userId')
-  .get(auth('getUsers', 'manageUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers', 'getUsers'), validate(userValidation.updateUser), userController.updateUser)
+  .route('/:ticketId')
+  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
+  .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 
 module.exports = router;

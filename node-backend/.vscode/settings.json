@@ -1,3 +1,9 @@
 {
-    "workbench.colorTheme": "Dracula"
+    "workbench.colorTheme": "Dracula",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "[javascript]": {
+        "editor.formatOnSave": true
+    }
 }
