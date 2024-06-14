@@ -1,7 +1,16 @@
 const allRoles = {
   user: ['getUsers'],
   agent: ['getUsers', 'manageUsers'],
-  admin: ['getUsers', 'manageUsers'],
+  admin: [
+    'createTicket',
+    'getTicket',
+    'getTickets',
+    'updateTicket',
+    'deleteTicket',
+    'manageUsers',
+    'getUser',
+    'manageTickets',
+  ],
 };
 
 const roles = Object.keys(allRoles);

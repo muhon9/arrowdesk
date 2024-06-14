@@ -11,9 +11,12 @@
   "rules": {
     "no-console": "off",
     "func-names": "off",
+    "no-unused-vars": "warn",
     "no-underscore-dangle": "off",
     "consistent-return": "off",
     "jest/expect-expect": "off",
-    "security/detect-object-injection": "off"
+    "security/detect-object-injection": "off",
+    "import/no-extraneous-dependencies": "off",
+    "global-require": 0  
   }
 }

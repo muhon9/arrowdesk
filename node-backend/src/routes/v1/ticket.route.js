@@ -1,25 +1,23 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
-const validate = require('../../middlewares/validate');
-const userValidation = require('../../validations/user.validation');
-const userController = require('../../controllers/user.controller');
+// const validate = require('../../middlewares/validate');
+// const userValidation = require('../../validations/user.validation');
+const ticketController = require('../../controllers/ticket.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get((req, res) => {
-    res.json({
-      message: 'Ticket get',
-    });
-  });
+  .post(auth('createTicket'), ticketController.createTicket)
+  .get(auth('getTickets'), ticketController.getTickets);
 
 router
-  .route('/:ticketId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+  .route('/:uid')
+  .get(auth('getTicket'), ticketController.getTicket)
+  .patch(auth('updateTicket'), ticketController.updateTicket)
+  .delete(auth('deleteTicket'), ticketController.deleteTicket);
+
+router.delete('/:uid/perm', auth('deleteTicket'), ticketController.permDeleteTicket);
 
 module.exports = router;
 
