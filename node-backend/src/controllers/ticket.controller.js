@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const { add } = require('winston');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
@@ -50,6 +51,25 @@ const assignTicket = catchAsync(async (req, res) => {
   res.send(ticket);
 });
 
+// add a comment to a ticket
+const addComment = catchAsync(async (req, res) => {
+  const ticket = await ticketService.addComment(req.params.uid, req.user.id, req.body);
+  res.send(ticket);
+});
+
+// edit a comment
+
+const editComment = catchAsync(async (req, res) => {
+  const ticket = await ticketService.editComment(req.params.uid, req.user.id, req.body);
+  res.send(ticket);
+});
+
+// delete a comment
+const deleteComment = catchAsync(async (req, res) => {
+  const ticket = await ticketService.deleteComment(req.params.uid, req.user.id, req.body.commentId);
+  res.send(ticket);
+});
+
 module.exports = {
   createTicket,
   getTickets,
@@ -59,4 +79,7 @@ module.exports = {
   permDeleteTicket,
   restoreTicket,
   assignTicket,
+  addComment,
+  editComment,
+  deleteComment,
 };

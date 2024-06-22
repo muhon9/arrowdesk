@@ -1,6 +1,6 @@
 const allRoles = {
-  user: ['getUsers'],
-  agent: ['getUsers', 'manageUsers'],
+  user: ['getUsers', 'addComment'],
+  agent: ['getUsers', 'manageUsers', 'addComment', 'editComment', 'deleteComment'],
   admin: [
     'createTicket',
     'getTicket',
@@ -12,6 +12,9 @@ const allRoles = {
     'manageTickets',
     'restoreTicket',
     'assignTicket',
+    'addComment',
+    'editComment',
+    'deleteComment',
   ],
 };
 

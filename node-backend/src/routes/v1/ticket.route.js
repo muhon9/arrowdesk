@@ -23,6 +23,11 @@ router.post('/restore/:uid', auth('restoreTicket'), ticketController.restoreTick
 // assign an agent to a ticket
 router.post('/:uid/assign', auth('assignTicket'), ticketController.assignTicket);
 
+// comment routes
+router.post('/:uid/comment', auth('addComment'), ticketController.addComment);
+router.patch('/:uid/comment', auth('editComment'), ticketController.editComment);
+router.delete('/:uid/comment', auth('deleteComment'), ticketController.deleteComment);
+
 module.exports = router;
 
 /**

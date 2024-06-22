@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const _ = require('lodash');
+const { string } = require('joi');
 const { roles } = require('../config/roles');
 const { toJSON, paginate } = require('./plugins');
 const historySchema = require('./history.model');
+const commentsSchema = require('./comment.model');
 
 const COLLECTION = 'tickets';
 
@@ -15,11 +17,6 @@ const ticketSchema = mongoose.Schema({
     ref: 'User',
     autopopulate: true,
   },
-  //   group: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     required: true,
-  //     ref: 'groups',
-  //   },
   assignee: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -39,21 +36,22 @@ const ticketSchema = mongoose.Schema({
     index: true,
   },
 
-  //   priority: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'priorities',
-  //     required: true,
-  //   },
-  //   tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tags', autopopulate: true }],
+  // priority: {
+  //   type: string,
+  //   enum: ['low', 'medium', 'high', 'urgent'],
+  //   required: true,
+  // },
+  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tags', autopopulate: true }],
   subject: { type: String, required: true },
   issue: { type: String, required: true },
-  //   closedDate: { type: Date },
-  //   dueDate: { type: Date },
-  //   comments: [commentSchema],
+  closedDate: { type: Date },
+  dueDate: { type: Date },
+  comments: [commentsSchema],
+
   //   notes: [noteSchema],
   //   attachments: [attachmentSchema],
   history: [historySchema],
-  //   subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'accounts' }],
+  subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 ticketSchema.plugin(toJSON);

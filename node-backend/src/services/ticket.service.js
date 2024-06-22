@@ -114,14 +114,98 @@ const assignTicket = async (uid, assignee) => {
   return ticket;
 };
 
+// comment a ticket
+
+const addComment = async (uid, userId, commentBody) => {
+  const ticket = await getTicketByUid(uid);
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
+  }
+  const comment = {
+    ...commentBody,
+    date: new Date(),
+    owner: userId,
+  };
+
+  const historyObj = {
+    action: 'ticket:add:comment',
+    date: new Date(),
+    actionBy: userId,
+    description: `Comment was added to ticket`,
+  };
+
+  ticket.comments.push(comment);
+  ticket.history.push(historyObj);
+  await ticket.save();
+  return ticket;
+};
+
+// edit a comment
+const editComment = async (uid, userId, commentBody) => {
+  const ticket = await getTicketByUid(uid);
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
+  }
+  const { commentId } = commentBody;
+  const comment = ticket.comments.id(commentId);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
+  if (comment.owner.toString() !== userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
+  }
+
+  comment.comment = commentBody.comment;
+  comment.editedAt = new Date();
+  const historyObj = {
+    action: 'ticket:edit:comment  ',
+    date: new Date(),
+    actionBy: userId,
+    description: `Comment ${commentId} was edited`,
+  };
+  ticket.history.push(historyObj);
+  await ticket.save();
+  return ticket;
+};
+
+// delete a comment
+
+const deleteComment = async (uid, userId, commentId) => {
+  console.log('userId', userId);
+  const ticket = await getTicketByUid(uid);
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
+  }
+  const comment = ticket.comments.id(commentId);
+  if (!comment) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
+  }
+  if (comment.owner.toString() !== userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
+  }
+
+  comment.deleted = true;
+  const historyObj = {
+    action: 'ticket:delete:comment',
+    date: new Date(),
+    actionBy: userId,
+    description: `Comment ${commentId} was deleted`,
+  };
+  ticket.history.push(historyObj);
+  await ticket.save();
+  return ticket;
+};
+
 module.exports = {
   createTicket,
   queryTickets,
   getTicketByUid,
-  getUserByEmail,
   updateTicketByUid,
   deleteTicketByUid,
   permDeleteTicketByUid,
   restoreTicketByUid,
   assignTicket,
+  addComment,
+  editComment,
+  deleteComment,
 };
