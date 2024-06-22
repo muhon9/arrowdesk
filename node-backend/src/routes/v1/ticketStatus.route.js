@@ -3,19 +3,19 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
+const { ticketStatusController } = require('../../controllers');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(auth('getUsers manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(validate(userValidation.getUsers), userController.getUsers);
+router.route('/').post(ticketStatusController.createTicketStatus).get(ticketStatusController.getTicketStatuses);
 
 router
-  .route('/:userId')
-  .get(auth('getUsers', 'manageUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('manageUsers', 'getUsers'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+  .route('/:uid')
+  .get(auth('getTicket'), ticketStatusController.getTicketStatus)
+  .patch(auth('updateTicket'), ticketStatusController.updateTicketStatus);
+//   .delete(auth('deleteTicket'), ticketStatusController.deleteTicketStatus);
+
+// assign an agent to a ticket
 
 module.exports = router;
 

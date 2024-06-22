@@ -18,6 +18,10 @@ router
   .delete(auth('deleteTicket'), ticketController.deleteTicket);
 
 router.delete('/:uid/perm', auth('deleteTicket'), ticketController.permDeleteTicket);
+router.post('/restore/:uid', auth('restoreTicket'), ticketController.restoreTicket);
+
+// assign an agent to a ticket
+router.post('/:uid/assign', auth('assignTicket'), ticketController.assignTicket);
 
 module.exports = router;
 

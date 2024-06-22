@@ -10,6 +10,8 @@ const allRoles = {
     'manageUsers',
     'getUser',
     'manageTickets',
+    'restoreTicket',
+    'assignTicket',
   ],
 };
 

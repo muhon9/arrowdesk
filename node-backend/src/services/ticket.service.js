@@ -8,11 +8,15 @@ const Ticket = require('../models/ticket.model');
  * @param {Object} userBody
  * @returns {Promise<User>}ticke
  */
-const createTicket = async (ticketBody) => {
-  const newTicket = await Ticket.create(ticketBody);
+const createTicket = async (ticketBody, userId) => {
+  if (!userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
+  }
 
-  console.log(newTicket);
-  return newTicket;
+  const ticket = new Ticket({ ...ticketBody });
+  ticket.history = [{ action: 'ticket:created', date: new Date(), actionBy: userId, description: `Ticket was created` }];
+  await ticket.save();
+  return ticket;
 };
 
 /**
@@ -35,7 +39,8 @@ const queryTickets = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getTicketByUid = async (uid) => {
-  return Ticket.findOne({ uid });
+  const ticket = await Ticket.findOne({ uid }).populate('owner name');
+  return ticket;
 };
 
 /**
@@ -54,23 +59,25 @@ const getUserByEmail = async (email) => {
  * @returns {Promise<Updated Ticket>}
  */
 const updateTicketByUid = async (uid, updateBody) => {
-  const ticket = await getTicketByUid(uid);
+  const ticket = await Ticket.findOneAndUpdate(
+    { uid },
+    { ...updateBody, updated: new Date() }, // Ensure the `updated` field is set
+    { new: true } // Return the updated document
+  );
+
   if (!ticket) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
   }
 
-  Object.assign(ticket, updateBody);
-  await ticket.save();
   return ticket;
 };
 
 const deleteTicketByUid = async (uid) => {
-  const ticket = await getTicketByUid(uid);
+  const ticket = await Ticket.findOneAndUpdate({ uid }, { deleted: true }, { new: true });
   if (!ticket) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
   }
-  ticket.deleted = true;
-  await ticket.save();
+
   return ticket;
 };
 
@@ -88,6 +95,25 @@ const permDeleteTicketByUid = async (uid) => {
   return ticket;
 };
 
+const restoreTicketByUid = async (uid) => {
+  const ticket = await getTicketByUid(uid);
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
+  }
+  ticket.deleted = false;
+  await ticket.save();
+  return ticket;
+};
+
+// assgin a user to a ticket
+const assignTicket = async (uid, assignee) => {
+  const ticket = await Ticket.findOneAndUpdate({ uid }, { assignee }, { new: true });
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
+  }
+  return ticket;
+};
+
 module.exports = {
   createTicket,
   queryTickets,
@@ -96,4 +122,6 @@ module.exports = {
   updateTicketByUid,
   deleteTicketByUid,
   permDeleteTicketByUid,
+  restoreTicketByUid,
+  assignTicket,
 };

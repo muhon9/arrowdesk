@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { ticketService } = require('../services');
 
 const createTicket = catchAsync(async (req, res) => {
-  const ticket = await ticketService.createTicket(req.body);
+  const ticket = await ticketService.createTicket(req.body, req.user.id);
   res.status(httpStatus.CREATED).send(ticket);
 });
 
@@ -39,6 +39,17 @@ const permDeleteTicket = catchAsync(async (req, res) => {
   res.status(httpStatus.ACCEPTED).send({ message: 'Ticket deleted' });
 });
 
+const restoreTicket = catchAsync(async (req, res) => {
+  const ticket = await ticketService.restoreTicketByUid(req.params.uid);
+  res.send(ticket);
+});
+
+// assign an agent to a ticket
+const assignTicket = catchAsync(async (req, res) => {
+  const ticket = await ticketService.assignTicket(req.params.uid, req.body.assignee);
+  res.send(ticket);
+});
+
 module.exports = {
   createTicket,
   getTickets,
@@ -46,4 +57,6 @@ module.exports = {
   updateTicket,
   deleteTicket,
   permDeleteTicket,
+  restoreTicket,
+  assignTicket,
 };
