@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const ticketRoute = require('./ticket.route');
 const ticketStatusRoute = require('./ticketStatus.route');
+const tagRoute = require('./tag.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -24,6 +25,10 @@ const defaultRoutes = [
   {
     path: '/ticketstatus',
     route: ticketStatusRoute,
+  },
+  {
+    path: '/tags',
+    route: tagRoute,
   },
   {
     path: '/heartz',
