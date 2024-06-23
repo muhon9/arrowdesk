@@ -70,6 +70,13 @@ const deleteComment = catchAsync(async (req, res) => {
   res.send(ticket);
 });
 
+// attach tags to ticket
+
+const addTags = catchAsync(async (req, res) => {
+  const ticket = await ticketService.addTag(req.params.uid, req.body.tags);
+  res.send(ticket);
+});
+
 module.exports = {
   createTicket,
   getTickets,
@@ -82,4 +89,5 @@ module.exports = {
   addComment,
   editComment,
   deleteComment,
+  addTags,
 };

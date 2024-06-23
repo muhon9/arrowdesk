@@ -1,5 +1,7 @@
+const { add } = require('winston');
 const tagService = require('../services/tag.service');
 const catchAsync = require('../utils/catchAsync');
+const { addTag } = require('../services/ticket.service');
 
 const createTag = catchAsync(async (req, res) => {
   const tag = await tagService.create(req.body);

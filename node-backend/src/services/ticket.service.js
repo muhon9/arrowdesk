@@ -196,6 +196,17 @@ const deleteComment = async (uid, userId, commentId) => {
   return ticket;
 };
 
+// add a tag to a ticket
+const addTag = async (uid, tags) => {
+  const ticket = await getTicketByUid(uid);
+  if (!ticket) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Ticket not found');
+  }
+  ticket.tags = tags;
+  await ticket.save();
+  return ticket;
+};
+
 module.exports = {
   createTicket,
   queryTickets,
@@ -208,4 +219,5 @@ module.exports = {
   addComment,
   editComment,
   deleteComment,
+  addTag,
 };

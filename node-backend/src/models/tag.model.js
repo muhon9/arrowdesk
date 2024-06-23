@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { sanitizeFieldPlainText } = require('../utils');
 const { toJSON } = require('./plugins');
 
-const COLLECTION = 'tags';
+const COLLECTION = 'Tag';
 
 /**
  * Tag Schema

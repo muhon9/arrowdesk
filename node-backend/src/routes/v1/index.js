@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const ticketRoute = require('./ticket.route');
 const ticketStatusRoute = require('./ticketStatus.route');
+const customerRoute = require('./customer.route');
 const tagRoute = require('./tag.route');
 const config = require('../../config/config');
 
@@ -29,6 +30,10 @@ const defaultRoutes = [
   {
     path: '/tags',
     route: tagRoute,
+  },
+  {
+    path: '/customers',
+    route: customerRoute,
   },
   {
     path: '/heartz',

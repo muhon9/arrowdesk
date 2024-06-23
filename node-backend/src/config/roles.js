@@ -15,6 +15,12 @@ const allRoles = {
     'addComment',
     'editComment',
     'deleteComment',
+    'addTags',
+    'getCustomers',
+    'getCustomer',
+    'updateCustomer',
+    'deleteCustomer',
+    'createCustomer',
   ],
 };
 

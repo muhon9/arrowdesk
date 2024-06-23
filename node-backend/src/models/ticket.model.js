@@ -11,6 +11,11 @@ const COLLECTION = 'tickets';
 
 const ticketSchema = mongoose.Schema({
   uid: { type: String, unique: true, index: true },
+  client: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
+    ref: 'Client',
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -41,7 +46,7 @@ const ticketSchema = mongoose.Schema({
   //   enum: ['low', 'medium', 'high', 'urgent'],
   //   required: true,
   // },
-  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tags', autopopulate: true }],
+  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag', autopopulate: true }],
   subject: { type: String, required: true },
   issue: { type: String, required: true },
   closedDate: { type: Date },
@@ -62,6 +67,7 @@ const autoPopulate = function (next) {
   this.populate([
     { path: 'status owner', select: 'name' },
     { path: 'assignee', select: 'name' },
+    { path: 'comments.owner', select: 'name' },
   ]);
 
   return next();

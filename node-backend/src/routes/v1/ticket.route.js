@@ -28,6 +28,9 @@ router.post('/:uid/comment', auth('addComment'), ticketController.addComment);
 router.patch('/:uid/comment', auth('editComment'), ticketController.editComment);
 router.delete('/:uid/comment', auth('deleteComment'), ticketController.deleteComment);
 
+// tag routes
+router.post('/:uid/tags', auth('addTags'), ticketController.addTags);
+
 module.exports = router;
 
 /**
