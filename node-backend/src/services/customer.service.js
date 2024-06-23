@@ -19,47 +19,35 @@ customerService.queryCustomers = async (filter, options) => {
 
 // Bulk create customers
 customerService.bulkCustomerCreate = async (dataArray) => {
-  const savedObjects = [];
-  const failedObjects = [];
-  try {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const dataObject of dataArray) {
+  const operations = dataArray.map((dataObject) =>
+    (async () => {
+      const { username } = dataObject;
       try {
-        const { username } = dataObject;
-        // console.log("dataObject", dataObject);
-        const existingData = Customer.findOne({ username }); // Assuming key1 is the identifier
-
+        const existingData = await Customer.findOne({ username });
         if (existingData) {
-          failedObjects.push({
-            ...dataObject,
-            reason: 'Customer already exists in database',
-          });
-        } else {
-          const newData = new Customer({
-            ...dataObject,
-            address: `${dataObject.flat || ''} ${dataObject.house || ''}, ${dataObject.road || ''}`,
-          });
-          newData.save();
-          savedObjects.push(dataObject);
+          return { ...dataObject, reason: 'Customer already exists in database', failed: true };
         }
+        const address = `${dataObject.flat || ''} ${dataObject.house || ''}, ${dataObject.road || ''}`;
+        const newData = new Customer({ ...dataObject, address });
+        await newData.save(); // Ensure saving is awaited
+        return dataObject;
       } catch (error) {
-        failedObjects.push({
-          ...dataObject,
-          reason: `MongoDB Error: ${error.message}`,
-        });
+        return { ...dataObject, reason: `MongoDB Error: ${error.message}`, failed: true };
       }
-    }
+    })()
+  );
 
-    const responseMessage = failedObjects.length ? `Some objects failed to save.` : `All objects saved successfully.`;
+  const results = await Promise.all(operations);
+  const savedObjects = results.filter((result) => !result.failed);
+  const failedObjects = results.filter((result) => result.failed);
 
-    return {
-      message: responseMessage,
-      savedObjects,
-      failedObjects,
-    };
-  } catch (error) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Internal Server Error');
-  }
+  const responseMessage = failedObjects.length ? `Some objects failed to save.` : `All objects saved successfully.`;
+
+  return {
+    message: responseMessage,
+    savedObjects,
+    failedObjects,
+  };
 };
 
 customerService.update = async (tagId, tagBody) => {
