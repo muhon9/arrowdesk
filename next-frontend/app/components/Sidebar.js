@@ -99,7 +99,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, path: "/" },
+  { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
   { text: "Ticket", icon: <AssignmentIcon />, path: "/tickets" },
   { text: "Users", icon: <PersonIcon />, path: "/users" },
   { text: "Customers", icon: <GroupIcon />, path: "/customers" },
