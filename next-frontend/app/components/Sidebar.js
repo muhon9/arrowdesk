@@ -30,6 +30,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Link from "next/link";
+import DropdownUser from "./DropDownUser";
 
 const drawerWidth = 240;
 
@@ -136,8 +137,8 @@ export default function Sidebar({ children }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} color="primary">
-        <Toolbar>
-          <IconButton
+        <Toolbar className="flex justify-between">
+          {/* <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -148,10 +149,11 @@ export default function Sidebar({ children }) {
             }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography variant="h6" noWrap component="div">
             Mini variant drawer
           </Typography>
+          <DropdownUser />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -257,7 +259,7 @@ export default function Sidebar({ children }) {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
         {children}
       </Box>
